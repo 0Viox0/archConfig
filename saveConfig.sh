@@ -33,6 +33,16 @@ else
     echo "Picom config file not found in $HOME/.config/"
 fi
 
+echo "Backing up Rofi configs..."
+mkdir -p "$BACKUP_DIR"/rofi
+if [ -d "$HOME/.config/rofi" ]; then
+    cp -r "$HOME/.config/rofi" "$BACKUP_DIR"/
+elif [ -f "$HOME/.config/rofi/config.rasi" ]; then
+    cp "$HOME/.config/rofi/config.rasi" "$BACKUP_DIR"/rofi/
+else
+    echo "Rofi config directory/file not found in $HOME/.config/rofi"
+fi
+
 # not for now 
 # # Backup X11/Xorg configs
 # echo "Backing up X11/Xorg configs..."

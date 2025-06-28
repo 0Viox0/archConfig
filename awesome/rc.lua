@@ -370,15 +370,15 @@ globalkeys = gears.table.join(
         end,
         { description = "restore minimized", group = "client" }),
 
-    -- Prompt
-    awful.key({ modkey }, "r", function()
-        awful.util.spawn("dmenu_run")
-    end, { description = "run prompt", group = "launcher" }),
+    -- -- Prompt
+    -- awful.key({ modkey }, "r", function()
+    --     awful.util.spawn("dmenu_run")
+    -- end, { description = "run prompt", group = "launcher" }),
 
-    -- Launch browser
-    awful.key({ modkey }, "r", function()
-        awful.util.spawn("dmenu_run")
-    end, { description = "run prompt", group = "launcher" }),
+    -- -- Launch browser
+    -- awful.key({ modkey }, "r", function()
+    --     awful.util.spawn("dmenu_run")
+    -- end, { description = "run prompt", group = "launcher" }),
 
     awful.key({ modkey }, "x",
         function()
@@ -391,7 +391,9 @@ globalkeys = gears.table.join(
         end,
         { description = "lua execute prompt", group = "awesome" }),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
+    awful.key({ modkey }, "p", function()
+            awful.spawn.with_shell('rofi -theme ~/.config/rofi/themes/tokyonight.rasi -show drun');
+        end,
         { description = "show the menubar", group = "launcher" })
 )
 
