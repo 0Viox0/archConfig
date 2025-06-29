@@ -211,6 +211,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox.visible = false
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -402,6 +403,10 @@ clientkeys = gears.table.join(
         function(c)
             c.fullscreen = not c.fullscreen
             c:raise()
+
+            if (not c.fullscreen) then
+                awful.spawn.with_shell("polybar-msg cmd show")
+            end
         end,
         { description = "toggle fullscreen", group = "client" }),
     awful.key({ modkey, "Shift" }, "c", function(c) c:kill() end,
@@ -663,3 +668,29 @@ awful.spawn.with_shell("picom");
 awful.spawn.with_shell("/home/viox/.config/polybar/launch.sh");
 
 awful.spawn.with_shell("xset s off && xset -dpms && xset s noblank")
+
+
+-- Add this in your Signals section (around where other client signals are)
+client.connect_signal("focus", function(client)
+    -- awful.spawn.with_shell("/home/viox/.config/polybar/launch.sh");
+
+    -- Check if focused client is fullscreen
+    if client.fullscreen then
+        awful.spawn.with_shell("polybar-msg cmd hide")
+    else
+        -- Only show polybar if no other window in this tag is fullscreen
+        local tag = client.screen.selected_tag
+        local has_fullscreen = false
+
+        for _, cl in ipairs(tag:clients()) do
+            if cl.fullscreen then
+                has_fullscreen = true
+                break
+            end
+        end
+
+        if not has_fullscreen then
+            awful.spawn.with_shell("polybar-msg cmd show")
+        end
+    end
+end)
